@@ -77,11 +77,11 @@ session_start();
 
                     <div class="input-group">
                         <label>Referral Code (Optional)</label>
-                        <input type="text" name="referral_code" placeholder="Enter code for Admin access">
+                        <input type="text" name="referral_code" placeholder="e.g. ADM0004">
                     </div>
 
                     <div class="agree-row">
-                        <input type="checkbox" name="terms" required checked>
+                        <input type="checkbox" name="terms" required>
                         <label>I agree to <span id="termsLink">Terms and Conditions</span></label>
                     </div>
 
@@ -103,8 +103,15 @@ session_start();
             <div style="color: #ccc; line-height: 1.6;">
                 <p>1. Acceptance of Terms</p>
                 <p style="font-size: 14px; margin-bottom: 15px;">By accessing and using ASENXO services, you accept and agree to be bound by these terms.</p>
+                
                 <p>2. User Accounts</p>
                 <p style="font-size: 14px; margin-bottom: 15px;">You are responsible for maintaining the confidentiality of your account credentials.</p>
+                
+                <p>3. Privacy</p>
+                <p style="font-size: 14px; margin-bottom: 15px;">Your data is handled according to our Privacy Policy.</p>
+                
+                <p>4. Verification</p>
+                <p style="font-size: 14px; margin-bottom: 15px;">You must verify your email address to activate your account.</p>
             </div>
             <button class="close-modal" id="closeModal" style="background: #e2b974; color: #000; border: none; padding: 10px 30px; border-radius: 5px; margin-top: 20px; cursor: pointer; width: 100%;">Close</button>
         </div>
@@ -112,188 +119,163 @@ session_start();
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-    (function() {
-        const SUPABASE_URL = 'https://hmxrblblcpbikkxcwwni.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhteHJibGJsY3BiaWtreGN3d25pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIyODY0MDksImV4cCI6MjA4Nzg2MjQwOX0.qC4Lm2KbToc0f1syHpMWJmQqRhQTosNfFzBrfTXSWDw';
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        (function() {
+            const SUPABASE_URL = 'https://hmxrblblcpbikkxcwwni.supabase.co';
+            const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhteHJibGJsY3BiaWtreGN3d25pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIyODY0MDksImV4cCI6MjA4Nzg2MjQwOX0.qC4Lm2KbToc0f1syHpMWJmQqRhQTosNfFzBrfTXSWDw';
+            const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        const form = document.getElementById('registerForm');
-        const signupBtn = document.getElementById('signupBtn');
-        const formMessage = document.getElementById('formMessage');
-        const passwordInput = document.getElementById('password');
-        const toggleBtn = document.getElementById('togglePassword');
-        const toggleIcon = document.getElementById('toggleIcon');
-        const termsLink = document.getElementById('termsLink');
-        const modal = document.getElementById('termsModal');
-        const closeBtn = document.getElementById('closeModal');
+            const form = document.getElementById('registerForm');
+            const signupBtn = document.getElementById('signupBtn');
+            const formMessage = document.getElementById('formMessage');
+            const passwordInput = document.getElementById('password');
+            const toggleBtn = document.getElementById('togglePassword');
+            const toggleIcon = document.getElementById('toggleIcon');
+            const termsLink = document.getElementById('termsLink');
+            const modal = document.getElementById('termsModal');
+            const closeBtn = document.getElementById('closeModal');
 
-        // Password Visibility Toggle
-        if (toggleBtn && passwordInput && toggleIcon) {
-            toggleBtn.addEventListener('click', () => {
-                const type = passwordInput.type === 'password' ? 'text' : 'password';
-                passwordInput.type = type;
-                toggleIcon.classList.toggle('fa-eye');
-                toggleIcon.classList.toggle('fa-eye-slash');
-            });
-        }
-
-        // Modal Logic
-        if (termsLink) termsLink.addEventListener('click', (e) => { e.preventDefault(); modal.style.display = 'flex'; });
-        if (closeBtn) closeBtn.addEventListener('click', () => modal.style.display = 'none');
-        window.addEventListener('click', (e) => { if (e.target === modal) modal.style.display = 'none'; });
-
-        // Password Validation UI
-        const password = document.getElementById("password");
-        const checklist = document.getElementById("passwordChecklist");
-        if (password && checklist) {
-            const checkUpper = document.getElementById("checkUpper");
-            const checkLower = document.getElementById("checkLower");
-            const checkNumber = document.getElementById("checkNumber");
-            const checkSpecial = document.getElementById("checkSpecial");
-            const checkLength = document.getElementById("checkLength");
-
-            function toggle(el, valid) {
-                el.classList.remove("valid", "invalid");
-                el.classList.add(valid ? "valid" : "invalid");
+            if (toggleBtn && passwordInput && toggleIcon) {
+                toggleBtn.addEventListener('click', () => {
+                    const type = passwordInput.type === 'password' ? 'text' : 'password';
+                    passwordInput.type = type;
+                    toggleIcon.classList.toggle('fa-eye');
+                    toggleIcon.classList.toggle('fa-eye-slash');
+                });
             }
 
-            password.addEventListener("input", () => {
-                const val = password.value;
-                checklist.style.display = val.length > 0 ? 'block' : 'none';
-                toggle(checkUpper, /[A-Z]/.test(val));
-                toggle(checkLower, /[a-z]/.test(val));
-                toggle(checkNumber, /[0-9]/.test(val));
-                toggle(checkSpecial, /[!@#$%^&*(),.?":{}|<>]/.test(val));
-                toggle(checkLength, val.length >= 8);
-            });
-        }
-
-        function showMessage(text, type = 'success') {
-            formMessage.className = `form-message ${type}`;
-            formMessage.innerHTML = text;
-            formMessage.style.display = 'block';
-        }
-
-        // MAIN REGISTRATION LOGIC
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            if (!form.checkValidity()) {
-                form.reportValidity();
-                return;
+            if (termsLink) {
+                termsLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    modal.style.display = 'flex';
+                });
             }
+            if (closeBtn) closeBtn.addEventListener('click', () => modal.style.display = 'none');
+            window.addEventListener('click', (e) => { if (e.target === modal) modal.style.display = 'none'; });
 
-            const email = document.querySelector('input[name="email"]').value;
-            const password = document.querySelector('input[name="password"]').value;
-            const firstName = document.querySelector('input[name="first_name"]').value;
-            const lastName = document.querySelector('input[name="last_name"]').value;
-            const referralCode = document.querySelector('input[name="referral_code"]').value.trim();
+            const password = document.getElementById("password");
+            const checklist = document.getElementById("passwordChecklist");
+            if (password && checklist) {
+                const checkUpper = document.getElementById("checkUpper");
+                const checkLower = document.getElementById("checkLower");
+                const checkNumber = document.getElementById("checkNumber");
+                const checkSpecial = document.getElementById("checkSpecial");
+                const checkLength = document.getElementById("checkLength");
 
-            signupBtn.disabled = true;
-            signupBtn.textContent = 'Creating account...';
-            formMessage.style.display = 'none';
-
-            try {
-                let assignedRole = 'msme'; // Default role
-
-                // 1. VALIDATE REFERRAL CODE (If provided)
-                if (referralCode !== '') {
-                    const { data: codeData, error: codeError } = await supabase
-                        .from('referral_codes')
-                        .select('role')
-                        .eq('code', referralCode)
-                        .maybeSingle();
-
-                    if (codeError) throw new Error("Error checking referral code.");
-                    
-                    if (codeData && codeData.role) {
-                        assignedRole = codeData.role;
-                        console.log("Referral code valid. Role assigned:", assignedRole);
-                    } else {
-                        throw new Error("Invalid referral code. Leave blank for MSME registration.");
-                    }
+                function toggle(el, valid) {
+                    el.classList.remove("valid", "invalid");
+                    el.classList.add(valid ? "valid" : "invalid");
                 }
 
-                // 2. SIGN UP THE USER (AUTHENTICATION)
-                const { data: authData, error: authError } = await supabase.auth.signUp({
-                    email,
-                    password,
-                    options: { 
-                        data: { 
-                            first_name: firstName, 
-                            last_name: lastName, 
-                            role: assignedRole 
-                        }
+                password.addEventListener("input", () => {
+                    const val = password.value;
+                    if (val.length > 0 && checklist.style.display === 'none') {
+                        checklist.style.display = 'block';
+                    } else if (val.length === 0 && checklist.style.display !== 'none') {
+                        checklist.style.display = 'none';
                     }
+                    toggle(checkUpper, /[A-Z]/.test(val));
+                    toggle(checkLower, /[a-z]/.test(val));
+                    toggle(checkNumber, /[0-9]/.test(val));
+                    toggle(checkSpecial, /[!@#$%^&*(),.?":{}|<>]/.test(val));
+                    toggle(checkLength, val.length >= 8);
                 });
-
-                if (authError) throw authError;
-
-                // 3. INSERT USER PROFILE (DATABASE)
-if (authData.user) {
-    const { error: profileError } = await supabase
-        .from('user_profiles')
-        .upsert([ // Changed from .insert to .upsert to avoid 409 Conflict
-            { 
-                id: authData.user.id, 
-                first_name: firstName, 
-                last_name: lastName, 
-                email: email,
-                role: assignedRole 
             }
-        ], { onConflict: 'id' }); // Explicitly tell it to check the 'id' column
 
-    if (profileError) {
-        console.error("Profile Upsert Error:", profileError);
-        // We don't necessarily want to stop the whole process if the profile 
-        // already exists, but we should log it.
-    }
-}
+            function showMessage(text, type = 'success') {
+                formMessage.className = `form-message ${type}`;
+                formMessage.innerHTML = text;
+            }
 
-                // 4. OTP GENERATION & DB LOGGING
-                const generatedOtp = Math.floor(100000 + Math.random() * 900000).toString();
-                const expiresAt = new Date(Date.now() + 10 * 60000).toISOString();
+            function generateOtp() {
+                return Math.floor(100000 + Math.random() * 900000).toString();
+            }
 
-                const { error: dbError } = await supabase
-                    .from('email_verifications')
-                    .upsert({ 
-                        email: email, 
-                        otp: generatedOtp, 
-                        expires_at: expiresAt,
-                        attempts: 0 
-                    }, { onConflict: 'email' });
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                if (!form.checkValidity()) {
+                    form.reportValidity();
+                    return;
+                }
 
-                if (dbError) throw dbError;
+                const email = document.querySelector('input[name="email"]').value;
+                const password = document.querySelector('input[name="password"]').value;
+                const firstName = document.querySelector('input[name="first_name"]').value;
+                const lastName = document.querySelector('input[name="last_name"]').value;
+                const referralCode = document.querySelector('input[name="referral_code"]').value;
 
-                // 5. SEND OTP VIA PHP MAIL
+                signupBtn.disabled = true;
+                signupBtn.textContent = 'Creating account...';
+
                 try {
-                    await fetch('send-otp.php', {
+                    const { data, error } = await supabase.auth.signUp({
+                        email,
+                        password,
+                        options: { 
+                            data: { 
+                                first_name: firstName, 
+                                last_name: lastName, 
+                                referral_code: referralCode,
+                                email_verified: false
+                            }
+                        }
+                    });
+
+                    if (error) throw error;
+
+                    const generatedOtp = generateOtp();
+
+                    const response = await fetch('send-otp.php', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ 
                             email: email, 
                             otp: generatedOtp,
-                            firstName: firstName
+                            firstName: firstName,
+                            lastName: lastName
                         })
                     });
-                } catch (emailErr) {
-                    console.warn('Email fetch failed, but record is in DB.');
+
+                    const mailResult = await response.json();
+                    
+                    if (!mailResult.success) {
+                        console.warn('Email warning:', mailResult.error);
+                    }
+
+                    sessionStorage.setItem('pending_email', email);
+                    sessionStorage.setItem('pending_otp', generatedOtp);
+                    sessionStorage.setItem('pending_first_name', firstName);
+                    sessionStorage.setItem('pending_last_name', lastName);
+                    sessionStorage.setItem('pending_referral_code', referralCode);
+                    
+                    showMessage('Account created! Check your email for verification code.', 'success');
+                    
+                    setTimeout(() => {
+                        window.location.href = 'verification.php?email=' + encodeURIComponent(email);
+                    }, 1500);
+
+                } catch (err) {
+                    if (err.message && err.message.includes('referral code')) {
+                        showMessage('Invalid referral code. Please leave it blank or use a valid code.', 'error');
+                    } else {
+                        showMessage(err.message, 'error');
+                    }
+                    signupBtn.disabled = false;
+                    signupBtn.textContent = 'Sign Up';
                 }
+            });
 
-                showMessage('✅ Account Created! Please check your Email for the OTP.', 'success');
-                
-                setTimeout(() => {
-                    window.location.href = 'verification.php?email=' + encodeURIComponent(email);
-                }, 2000);
-
-            } catch (err) {
-                console.error('Registration error:', err);
-                showMessage(err.message || 'Error creating account', 'error');
-                signupBtn.disabled = false;
-                signupBtn.textContent = 'Sign Up';
-            }
-        });
-    })();
+            // Google registration
+            document.getElementById('googleRegister').addEventListener('click', async () => {
+                const { error } = await supabase.auth.signInWithOAuth({ 
+                    provider: 'google',
+                    options: {
+                        redirectTo: window.location.origin + '/msme-home.php'
+                    }
+                });
+                if (error) console.error(error);
+            });
+        })();
     </script>
 </body>
 </html>

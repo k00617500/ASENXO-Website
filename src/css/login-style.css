@@ -1,0 +1,233 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --bg-body: #0a0a0a;
+    --bg-card: #0e0e0e;
+    --text-primary: #ffffff;
+    --text-secondary: #e0e0e0;
+    --text-muted: #aaa;
+    --border-color: #2a2a2a;
+    --input-bg: #121212;
+    --input-border: #2a2a2a;
+    --accent: #00df8d;
+    --google-btn-bg: #1a1a1a;
+    --google-btn-border: #2a2a2a;
+    --divider-color: #555;
+    --shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
+}
+
+body {
+    background: var(--bg-body);
+    font-family: "Inter", sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    margin: 0;
+    animation: bodyFade 0.9s ease-out;
+}
+
+@keyframes bodyFade {
+    0% { background-color: #000; }
+    100% { background-color: #0a0a0a; }
+}
+
+.login-card {
+    max-width: 90vw;    
+    width: 100%;
+    margin: 0 auto;
+    background: var(--bg-card);
+    border-radius: 30px;
+    overflow: hidden;
+    margin: 0 auto;
+    animation: cardIntro 0.7s cubic-bezier(0.2, 0.9, 0.3, 1) forwards;
+}
+
+@keyframes cardIntro {
+    0% { opacity: 0; transform: translateY(30px) scale(0.98); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.form-col {
+    background: var(--bg-card);
+    color: var(--text-primary);
+    padding: 2.5rem 3rem;
+    width: 100%;
+}
+
+.form-logo {
+    width: 180px;
+    display: block;
+    margin: 0 auto 2rem auto;
+}
+
+.google-btn {
+    background: var(--google-btn-bg);
+    border: 1px solid var(--google-btn-border);
+    color: var(--text-primary);
+    padding: 1rem 7rem;
+    width: 100%;
+    border-radius: 15px;
+    font-weight: 500;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.google-btn:hover {
+    background: var(--accent);
+    color: white;
+}
+.google-btn i {
+    font-size: 1.3rem;
+}
+
+.divider {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 2rem 0;
+    color: var(--divider-color);
+    font-size: 0.95rem;
+    text-transform: uppercase;
+}
+.divider-line {
+    height: 1px;
+    background: var(--border-color);
+    flex: 1;
+}
+
+.input-group {
+    margin-bottom: 1.5rem;
+    width: 100%;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+.input-group input {
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
+    color: var(--text-primary);
+    padding: 0.85rem 1rem;       
+    width: 100%;
+    border-radius: 15px;
+    font-size: 1rem;
+    transition: border 0.2s;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+.password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-wrapper input {
+    padding-right: 3rem;          
+}
+
+.password-toggle {
+    position: absolute;
+    right: 1rem;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 1.3rem;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s;
+}
+.password-toggle:hover {
+    color: var(--accent);
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0.5rem 0 2rem 0;
+}
+
+.agree-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+}
+
+.agree-row input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--accent);
+}
+
+.row a {
+    color: var(--accent);
+    font-size: 0.9rem;
+    text-decoration: none;
+}
+.row a:hover {
+    text-decoration: underline;
+}
+
+.signup-btn {
+    background: var(--text-primary);
+    color: var(--bg-card);
+    padding: 1.2rem;
+    border: none;
+    border-radius: 15px;
+    width: 100%;
+    font-weight: 600;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: opacity 0.2s, background 0.2s;
+}
+.signup-btn:hover {
+    opacity: 0.9;
+    background-color: var(--accent);
+    color: white;
+}
+
+.login-link {
+    margin-top: 2rem;
+    font-size: 1rem;
+    text-align: center;
+    color: var(--text-muted);
+}
+.login-link a {
+    color: var(--accent);
+    font-weight: 500;
+    text-decoration: none;
+}
+.login-link a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 500px) {
+    .form-col {
+        padding: 2rem 1.5rem;
+    }
+}
